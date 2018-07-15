@@ -1,0 +1,39 @@
+{
+  "name": "rda-coordinator-service",
+  "version": "1.0.0",
+  "description": "An abstraction for enabling multiple data sources to be used with RDA. It is used to set up and update clusters of compute nodes",
+  "main": "index.mjs",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node --experimental-modules --no-warnings ./node_modules/.bin/section ./test/*.mjs --dev --subenv-testing --log-level=error+ --log-module=*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/infect-org/rda-coordinator-service.git"
+  },
+  "keywords": [
+    "RDA",
+    "coordinator"
+  ],
+  "author": "Michael van der Weg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/infect-org/rda-coordinator-service/issues"
+  },
+  "homepage": "https://github.com/infect-org/rda-coordinator-service#readme",
+  "dependencies": {
+    "ee-log": "^3.0.6",
+    "ee-types": "^2.1.4",
+    "logd": "^2.1.3",
+    "logd-console-transport": "^1.0.0",
+    "rda-service": "^2.5.1",
+    "section-tests": "^2.1.1",
+    "status-handler": "^1.0.0",
+    "superagent": "^3.8.3"
+  },
+  "devDependencies": {
+    "rda-fixtures": "^1.0.0"
+  }
+}
