@@ -66,6 +66,7 @@ export default class ClusterController extends Controller {
             const clusterHost = await this.registryClient.resolve('rda-cluster');
 
             // check the status on the cluster service
+            log.info(`Checking if the cluster to be created exists already`);
             const clusterStatusResponse = await superagent.get(`${clusterHost}/rda-cluster.cluster/${clusterIdentifier}`).ok(res => [404, 200].includes(res.status)).send();
 
             // make sure neither we, nor the cluster service knows
@@ -78,19 +79,41 @@ export default class ClusterController extends Controller {
                 // request information about the data that will 
                 // be processed by the cluster. this is needed 
                 // to size the cluster correctly
+                log.info(`Getting information about the data that has to be loaded into the cluster`);
                 const dataInfoResponse = await superagent.get(`${storageHost}/${data.dataSource}.dataset-info/${data.dataSet}`).ok(res => res.status === 200).send();
                 const info = dataInfoResponse.body;
 
                 // create the cluster 
+                log.info(`Setting up the cluster`);
                 const clusterResponse = await superagent.post(`${clusterHost}/rda-cluster.cluster`).ok(res => res.status === 201).send({
                     requiredMemory: info.totalMemory,
                     recordCount: info.recordCount,
                     dataSet: data.dataSet,
+                    dataSource: data.dataSource,
                 });
 
-                 
-                console.log(clusterResponse.body);
-                
+                // instruct the data source to create the shards
+                log.info(`Instruct the datasource to create data shards`);
+                await superagent.post(`${storageHost}/${data.dataSource}.shard`).ok(res => res.status === 201).send({
+                    shards: clusterResponse.body.shards,
+                    dataSet: data.dataSet,
+                });
+
+                // tell the cluster to initialize
+                log.info(`Initialize cluster`);
+                await superagent.patch(`${clusterHost}/rda-cluster.cluster/${clusterResponse.body.clusterId}`).ok(res => res.status === 200).send();
+
+                // return some info. the user has to get the 
+                // status info using the lsitOne method 
+                return {
+                    clusterId: clusterResponse.body.clusterId,
+                    clusterIdentifier: clusterResponse.body.clusterIdentifier,
+                    shards: clusterResponse.body.shards,
+                    requiredMemory: info.totalMemory,
+                    recordCount: info.recordCount,
+                    dataSet: data.dataSet,
+                    dataSource: data.dataSource,
+                };
             } else response.status(409).send(`Canont create cluster: the cluster '${clusterIdentifier}' exists already!`);
         }
     }

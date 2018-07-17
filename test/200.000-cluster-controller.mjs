@@ -44,7 +44,9 @@ section('Cluster Controller', (section) => {
             dataSet: dataSetId,
         });
 
-        if (clusterResponse.status !== 201) console.log(clusterResponse);
+        assert(clusterResponse.body);
+        assert(clusterResponse.body.clusterId);
+        assert.equal(clusterResponse.body.recordCount, 1000)
 
         await section.wait(200);
         await service.end();

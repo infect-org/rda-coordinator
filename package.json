@@ -34,6 +34,6 @@
     "superagent": "^3.8.3"
   },
   "devDependencies": {
-    "rda-fixtures": "^1.0.0"
+    "rda-fixtures": "^1.1.0"
   }
 }
