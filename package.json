@@ -26,6 +26,7 @@
   "dependencies": {
     "ee-log": "^3.0.6",
     "ee-types": "^2.1.4",
+    "envr": "^2.1.4",
     "logd": "^2.1.3",
     "logd-console-transport": "^1.0.0",
     "rda-service": "^2.5.1",
