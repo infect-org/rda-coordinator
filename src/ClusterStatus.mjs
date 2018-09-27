@@ -1,6 +1,3 @@
-'use strict';
-
-
 import StatusHandler from 'status-handler';
 
 

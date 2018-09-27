@@ -1,18 +1,9 @@
-'use strict';
-
-
 import RDAService from 'rda-service';
-import path from 'path';
-import logd from 'logd';
-
-const log = logd.module('rda-service-registry');
-
 
 
 // controllers
-import ClusterController from './controller/Cluster';
-
-
+import ClusterController from './controller/ClusterController.mjs';
+import ClusterDataUpdateController from './controller/ClusterDataUpdateController.mjs';
 
 
 
@@ -32,19 +23,21 @@ export default class RDACoordinatorService extends RDAService {
     * prepare the service
     */
     async load() {
-        // get a map of dtaa sources
+
+        // get a map of data sources
         this.dataSources = new Set(this.config.dataSources);
 
-
-        // register controllers
-        this.registerController(new ClusterController({
+        const options = {
             dataSources: this.dataSources,
             registryClient: this.registryClient,
-        }));
+        };
 
 
+        this.registerController(new ClusterController(options));
+        this.registerController(new ClusterDataUpdateController(options));
+
+        // load the web server
         await super.load();
-
 
         // tell the service registry that we're up and running
         await this.registerService();
