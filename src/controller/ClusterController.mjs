@@ -56,6 +56,7 @@ export default class ClusterController extends Controller {
      * unload the http client
      */
     async end() {
+        this.ended = true;
         await this.httpClient.end();
     }
 
@@ -87,6 +88,8 @@ export default class ClusterController extends Controller {
     * @return     {Promise}  udnefined
     */
     async pollClusterCompletion(clusterId, lock) {
+        if (this.ended) return;
+
         const clusterInfo = await this.getClusterInfo(clusterId);
 
         if (['active', 'ended', 'failed'].includes(clusterInfo.status)) {
@@ -96,7 +99,7 @@ export default class ClusterController extends Controller {
         } else if (['created', 'initialized'].includes(clusterInfo.status)) {
             // wait and try again
 
-            await new Delay().wait(5000);
+            await new Delay().wait(1000);
             await this.pollClusterCompletion(clusterId, lock);
         } else {
             throw new Error(`The cluster info returned an unknown status: ${clusterInfo.status}`);
@@ -119,7 +122,7 @@ export default class ClusterController extends Controller {
         const clusterHost = await this.registryClient.resolve('rda-cluster');
         const clusterUrl = `${clusterHost}/rda-cluster.cluster/${clusterId}`;
         const response = await this.httpClient.get(clusterUrl)
-            .expect(200)
+            .expect(200, 201)
             .send();
 
         return response.getData();
@@ -251,7 +254,7 @@ export default class ClusterController extends Controller {
 
 
                 // start polling the clusters status
-                this.pollClusterCompletion(clusterId, lock).catch(log.error);
+                this.pollClusterCompletion(clusterId, lock).catch(err => log.error(err));
 
 
                 // return some info. the user has to get the status info using the lsitOne method

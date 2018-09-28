@@ -33,6 +33,8 @@ section('Cluster Controller', (section) => {
 
 
     section.test('create cluster', async() => {
+        section.setTimeout(5000);
+        
         const service = new Service();
         const client = new HTTP2Client();
         await service.load();
@@ -48,7 +50,7 @@ section('Cluster Controller', (section) => {
         assert(data.clusterId);
         assert.equal(data.recordCount, 1000);
 
-        await section.wait(200);
+        await section.wait(1000);
         await service.end();
         await client.end();
     });

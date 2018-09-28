@@ -33,7 +33,7 @@
     "envr": "^2.1.4",
     "logd": "^2.2.0",
     "logd-console-transport": "^1.0.0",
-    "rda-service": "^3.1.0",
+    "rda-service": "^3.1.1",
     "section-tests": "^2.2.2",
     "status-handler": "^1.0.0"
   },
