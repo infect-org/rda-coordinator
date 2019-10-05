@@ -1,10 +1,13 @@
-import RDAService from 'rda-service';
-
+import RDAService from '@infect/rda-service';
+import path from 'path';
 
 // controllers
-import ClusterController from './controller/ClusterController.mjs';
-import ClusterDataUpdateController from './controller/ClusterDataUpdateController.mjs';
+import ClusterController from './controller/ClusterController.js';
+import ClusterDataUpdateController from './controller/ClusterDataUpdateController.js';
 
+
+
+const appRoot = path.join(path.dirname(new URL(import.meta.url).pathname), '../');
 
 
 
@@ -13,9 +16,11 @@ export default class RDACoordinatorService extends RDAService {
 
 
     constructor() {
-        super('rda-coordinator');
+        super({
+            name: 'rda-coordinator',
+            appRoot,
+        });
     }
-
 
 
 
@@ -23,9 +28,10 @@ export default class RDACoordinatorService extends RDAService {
     * prepare the service
     */
     async load() {
+        await this.initialize();
 
         // get a map of data sources
-        this.dataSources = new Set(this.config.dataSources);
+        this.dataSources = new Set(this.config.get('data-sources'));
 
         const options = {
             dataSources: this.dataSources,

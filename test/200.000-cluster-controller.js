@@ -1,9 +1,9 @@
-import Service from '../index.mjs';
+import Service from '../index.js';
 import section from 'section-tests';
 import assert from 'assert';
 import log from 'ee-log';
 import ServiceManager from '@infect/rda-service-manager';
-import { DataSet } from 'rda-fixtures';
+import { DataSet } from '@infect/rda-fixtures';
 import HTTP2Client from '@distributed-systems/http2-client';
 
 
@@ -17,7 +17,7 @@ section('Cluster Controller', (section) => {
 
     section.setup(async() => {
         sm = new ServiceManager({
-            args: '--dev --log-level=error+ --log-module=*'.split(' '),
+            args: '--dev.testing --log-level=error+ --log-module=*'.split(' '),
         });
 
         await sm.startServices('rda-service-registry');
