@@ -20,9 +20,9 @@ section('Cluster Controller', (section) => {
             args: '--dev.testing --log-level=error+ --log-module=*'.split(' '),
         });
 
-        await sm.startServices('rda-service-registry');
-        await sm.startServices('infect-rda-sample-storage', 'rda-cluster', 'rda-lock');
-        await sm.startServices('rda-compute', 'rda-compute', 'rda-compute', 'rda-compute');
+        await sm.startServices('@infect/rda-service-registry');
+        await sm.startServices('@infect/infect-rda-sample-storage', '@infect/rda-cluster', '@infect/rda-lock');
+        await sm.startServices('@infect/rda-compute', '@infect/rda-compute', '@infect/rda-compute', '@infect/rda-compute');
 
 
         // add fixtures
