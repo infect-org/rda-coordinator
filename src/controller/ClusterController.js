@@ -207,17 +207,6 @@ export default class ClusterController extends Controller {
                 const storageHost = await this.registryClient.resolve(data.dataSource);
 
 
-                // request information about the data that will be processed by the cluster. this is
-                // needed to size the cluster correctly
-                log.info('Getting information about the data that has to be loaded into the cluster');
-                const dataInfoURL = `${storageHost}/${data.dataSource}.dataset-info/${data.dataSet}`;
-                const dataInfoResponse = await this.httpClient.get(dataInfoURL)
-                    .expect(200)
-                    .send();
-
-                const info = await dataInfoResponse.getData();
-
-
 
                 // create the cluster
                 log.info('Setting up the cluster');
@@ -225,8 +214,6 @@ export default class ClusterController extends Controller {
                 const clusterResponse = await this.httpClient.post(`${clusterHost}/rda-cluster.cluster`)
                     .expect(201)
                     .send({
-                        requiredMemory: info.totalMemory,
-                        recordCount: info.recordCount,
                         dataSet: data.dataSet,
                         dataSource: data.dataSource,
                     });
@@ -263,8 +250,6 @@ export default class ClusterController extends Controller {
                     clusterIdentifier: clusterData.clusterIdentifier,
                     dataSet: data.dataSet,
                     dataSource: data.dataSource,
-                    recordCount: info.recordCount,
-                    requiredMemory: info.totalMemory,
                     shards: clusterData.shards,
                 };
             } else {
