@@ -191,7 +191,7 @@ export default class ClusterController extends Controller {
             // for it since the cluster should not be created when it already exists.
             const lock = this.lockClient.createLock(`cluster::${clusterIdentifier}`, {
                 timeout: 10,
-                ttl: 120,
+                ttl: 1200,
             });
 
             await lock.lock().catch((err) => {
