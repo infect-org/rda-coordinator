@@ -3,7 +3,7 @@ import section from 'section-tests';
 import assert from 'assert';
 import log from 'ee-log';
 import ServiceManager from '@infect/rda-service-manager';
-import { DataSet } from '@infect/rda-fixtures';
+import { ShardedDataSet } from '@infect/rda-fixtures';
 import HTTP2Client from '@distributed-systems/http2-client';
 
 
@@ -13,7 +13,7 @@ const host = 'http://l.dns.porn';
 
 section('Cluster Controller', (section) => {
     let sm;
-    let dataSetId;
+    let dataSet;
 
     section.setup(async() => {
         sm = new ServiceManager({
@@ -21,34 +21,34 @@ section('Cluster Controller', (section) => {
         });
 
         await sm.startServices('@infect/rda-service-registry');
-        await sm.startServices('@infect/infect-rda-sample-storage', '@infect/rda-cluster', '@infect/rda-lock');
-        await sm.startServices('@infect/rda-compute', '@infect/rda-compute', '@infect/rda-compute', '@infect/rda-compute');
+        await sm.startServices('@infect/infect-rda-sample-storage', '@infect/rda-cluster-service', '@infect/rda-lock-service');
+        await sm.startServices('@infect/rda-compute-service', '@infect/rda-compute-service', '@infect/rda-compute-service', '@infect/rda-compute-service');
 
 
         // add fixtures
-        const dataSet = new DataSet();
-        dataSetId = await dataSet.create();
+        dataSet = new ShardedDataSet();
+        await dataSet.create();
     });
 
 
 
     section.test('create cluster', async() => {
         section.setTimeout(5000);
-        
+
         const service = new Service();
         const client = new HTTP2Client();
         await service.load();
 
         const clusterResponse = await client.post(`${host}:${service.getPort()}/rda-coordinator.cluster`).expect(201).send({
             dataSource: 'infect-rda-sample-storage',
-            dataSet: dataSetId,
+            dataSet: dataSet.dataSetId,
+            modelPrefix: 'Infect',
         });
 
         const data = await clusterResponse.getData();
 
         assert(data);
         assert(data.clusterId);
-        assert.equal(data.recordCount, 1000);
 
         await section.wait(1000);
         await service.end();

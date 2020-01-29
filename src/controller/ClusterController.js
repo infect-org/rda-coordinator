@@ -179,6 +179,8 @@ export default class ClusterController extends Controller {
             request.response().status(400).send('Missing parameter \'dataSource\' in request body!');
         } else if (!type.string(data.dataSet)) {
             request.response().status(400).send('Missing parameter \'dataSet\' in request body!');
+        } else if (!type.string(data.modelPrefix)) {
+            request.response().status(400).send('Missing parameter \'modelPrefix\' in request body!');
         } else if (!this.dataSources.has(data.dataSource)) {
             request.response().status(404).send(`The data source ${data.dataSource} was not found!`);
         } else {
@@ -216,6 +218,7 @@ export default class ClusterController extends Controller {
                     .send({
                         dataSet: data.dataSet,
                         dataSource: data.dataSource,
+                        modelPrefix: data.modelPrefix,
                     });
 
 

@@ -36,8 +36,13 @@
   },
   "devDependencies": {
     "@distributed-systems/eslint-config": "^1.0.1",
+    "@infect/infect-rda-sample-storage": "^4.0.5",
+    "@infect/rda-cluster-service": "^3.1.0",
+    "@infect/rda-compute-service": "^3.0.2",
     "@infect/rda-fixtures": "^5.0.0",
+    "@infect/rda-lock-service": "^2.1.4",
     "@infect/rda-service-manager": "^2.0.4",
+    "@infect/rda-service-registry": "^3.0.3",
     "section-tests": "^2.2.4"
   },
   "type": "module"
