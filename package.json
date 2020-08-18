@@ -1,6 +1,6 @@
 {
   "name": "@infect/rda-coordinator-service",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "An abstraction for enabling multiple data sources to be used with RDA. It is used to set up and update clusters of compute nodes",
   "main": "index.js",
   "directories": {
