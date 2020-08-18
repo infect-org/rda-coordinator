@@ -1,8 +1,6 @@
-'use strict';
-
 import logd from 'logd';
 import ConsoleTransport from 'logd-console-transport';
-import Service from './index.mjs';
+import Service from './index.js';
 
 
 // set up the module logger

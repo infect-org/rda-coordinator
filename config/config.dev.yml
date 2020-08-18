@@ -1,0 +1,7 @@
+data-sources:
+  - infect-rda-sample-storage
+
+  
+
+service-registry:
+    host: ${SERVICE_REGISTRY_HOST}

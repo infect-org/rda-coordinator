@@ -1,0 +1,7 @@
+data-sources:
+  - infect-rda-sample-storage
+
+
+
+service-registry:
+    host: http://l.dns.porn:9000
