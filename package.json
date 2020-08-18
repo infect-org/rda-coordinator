@@ -1,6 +1,6 @@
 {
   "name": "rda-coordinator-service",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An abstraction for enabling multiple data sources to be used with RDA. It is used to set up and update clusters of compute nodes",
   "main": "index.mjs",
   "directories": {
